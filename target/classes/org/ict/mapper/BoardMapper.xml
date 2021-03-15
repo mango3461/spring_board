@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 1~4번 라인은 xml 스키마 설정으로 굳이 외울 필요 없음. -->
+<mapper namespace="org.ict.mapper.BoardMapper">
+<!-- mapper 태그 내의 namespace 속성에 연결할 인터페이스 이름을
+적어주면, 해당 인터페이스 내부으 ㅣ메서드를 여기에 구현할 수 있음 -->
+
+	<select id="getList" 
+			resultType="org.ict.domain.BoardVO">
+	<!-- select구문을 저장할 때는 selcet 태그를 씁니다.
+	속성 설명 : 
+	id는 연결할 메서드 이름,
+	resultType은 실행 결과로 리턴될 타입을 적습니다. -->
+		SELECT * FROM ictboard WHERE bno > 0
+	</select>
+	
+	<!-- 띄어쓰기와 엔터를 같은 걸로 간주 -->
+	<!-- 마이바티스에서는 객체를 전달받는 경우 객체 내부의 변수명을
+	#{변수명}과 같이 입력해 쿼리문을 완성시킵니다.
+	현재 코드에서 BoardVO에는
+	bno, title, content, writer, regdate, updatedate
+	라는 6개의 멤버변수가 존재하는데
+	변수명을 그대로 적어주기만 하면 알아서 맞는 자료가 전달됩니다. -->
+	<insert id="insert">
+		INSERT into 
+			ictboard (title, writer, content)
+				VALUES
+					(#{title}, #{writer}, #{content})
+	</insert>
+	
+	<select id="read"
+			resultType="org.ict.domain.BoardVO">
+		SELECT * FROM ictboard where bno = #{bno}		
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM ictboard where bno = #{bno}
+	</delete>
+	
+	<update id="update">
+		UPDATE ictboard 
+			SET 
+		title = #{title},
+		content = #{content},
+		updatedate = now()
+			WHERE
+		bno = #{bno}
+	</update>
+</mapper>
