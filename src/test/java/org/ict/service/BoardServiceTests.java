@@ -37,7 +37,7 @@ public class BoardServiceTests {
 		
 		boards.forEach(board -> {
 			log.info(board);
-		});
+		});		
 	}
 	
 	//@Test
@@ -53,12 +53,32 @@ public class BoardServiceTests {
 	
 	//@Test
 	public void testModify() {
-		BoardVO board = new BoardVO();
+		// 실제 수정로직은 수정 이전에
+		// 1. 특정 글의 전체 내용을 가져와 수정창에 뿌린다.
+		// 2. 뿌려진 내용 중 수정하고 싶은 내용을 수정한다.
+		// 3. 수정된 내용을 제출버튼을 통해 최종 반영한다.
+		// 따라서 위 로직을 따라가기 위해 이번에는
+		// BoardVO를 생성하는 대신
+		// get메서드를 활용해서 실제 글 내용을 먼저 가져온다음
+		// 수정된 내용이 DB에 반영되도록 하겠습니다.
+		BoardVO board = service.get(4L);
 		
-		board.setBno(7L);
-		board.setTitle("modify제목");
-		board.setContent("modify본문");
+		// get에 입력한 번호의 글이 없는 경우 자동 중지
+		if(board == null) {
+			return;
+		}
+		
+		board.setTitle("Modify반영제목");
+		board.setContent("Modify반영본문");
 		
 		service.modify(board);
+		
+//		BoardVO board = new BoardVO();
+//		
+//		board.setBno(7L);
+//		board.setTitle("modify제목");
+//		board.setContent("modify본문");
+//		
+//		service.modify(board);
 	}
 }
