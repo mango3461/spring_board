@@ -9,13 +9,14 @@
 </head>
 <body>
 	<h1>${board.bno }번 글 내용</h1>
-	<form>
+	<form action="/board/remove" method="post">
 		글 제목<input type="text" class="form-control" readonly="readonly" value="${board.title }"><br>
 		글쓴이<input type="text" class="form-control" readonly="readonly" value="${board.writer }"><br>
 		본문<br>
 		<textarea readonly="readonly" class="form-control">${board.content}</textarea><br>
 		등록날짜<input type="text" class="form-control" readonly="readonly" value=${board.regDate }><br>
 		수정날짜<input type="text" class="form-control" readonly="readonly" value=${board.updateDate }>
+		<input type="submit" class="btn btn-primary" value="삭제">
 	</form>
 	
 </body>

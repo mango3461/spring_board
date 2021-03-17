@@ -82,13 +82,26 @@ public class BoardControllerTests {
 				).andReturn().getModelAndView().getModelMap();		
 	}
 	
+	// testRegister와 유사하게 실행되나, 쿼리문 구조가 다르므로
+	// 맞는 자료를 전달하도록 파라미터와 url만 간단히 수정하면
+	// 똑같이 작동함.
 	//@Test
 	public void testModify() throws Exception {
 		mockMvc.perform(
-				MockMvcRequestBuilders.post("/board/modify?bno=11")
-					.param("title", "modify mango")
-					.param("content", "modify content")
-					.param("writer", "mango3461")
+			MockMvcRequestBuilders.post("/board/modify")
+					.param("title", "modi mango")
+					.param("content", "modi content")
+					.param("bno", "11")
+				).andReturn().getModelAndView().getViewName();
+	}
+	
+	// remove로직 역시 .post에 url을 적고 파라미터로
+	// bno와 번호만 전달하면 삭제를 잘 수행합니다.
+	//@Test
+	public void testRemove() throws Exception {
+		mockMvc.perform(
+			MockMvcRequestBuilders.post("/board/remove")
+					.param("bno", "3")
 				).andReturn().getModelAndView().getViewName();
 	}
 }

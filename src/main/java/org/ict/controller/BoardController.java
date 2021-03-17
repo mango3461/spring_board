@@ -96,10 +96,26 @@ public class BoardController {
 		return "redirect:/board/get?bno=" + board.getBno();		
 	}
 	
-	@GetMapping("modify")
-	public String modify(long bno, Model model) {
+	@GetMapping("/modify")
+	public String modify(Long bno, Model model) {
 		model.addAttribute("board", service.get(bno));
 		return "/board/modify";
 	}
+	
+	// Remove 로직을 아래에 짜 주세요.
+	// 일반테스트시는 get방식을 처리할 수 있도록,
+	// 이후 테스트 코드로 테스트 할 때는 post방식을 처리할 수 있도록 합니다.
+	@PostMapping("/remove")
+	public String remove(Long bno, RedirectAttributes rttr) {
+		
+		service.remove(bno);
+		// 추후 삭제 완료시 xx번 글이 삭제되었습니다라는
+		// 팝업을 띄우기 위해 미리 세팅
+		rttr.addFlashAttribute("bno", bno);
+		
+		// 삭제된 글의 디테일 페이지는 존재하지 않으므로 리스트로 이동
+		return "redirect:/board/list";
+	}
+	
 	
 }
