@@ -14,7 +14,9 @@
   </head>
 <body>
  <div class="container">
- 
+ 	<br>
+ 	<h1 style="text-align: center;"> 게시판 </h1>
+ 	<br><br>
 	<table class="table table-hover">
 	<thead>
 		<tr>
@@ -44,8 +46,10 @@
     <li class="page-item"><a class="page-link" href="#">4</a></li>
     <li class="page-item"><a class="page-link" href="#">5</a></li>
     <li class="page-item"><a class="page-link" href="#">»</a></li>
-   </ul>
-  	<hr>
+  </ul>
+  <a href="http://localhost:8181/board/register" class="btn btn-primary right" 
+  		style="float: right;" role="button">글쓰기</a>
+  		
 </div>
 </body>
 </html>

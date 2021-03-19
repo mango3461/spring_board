@@ -88,7 +88,7 @@ public class BoardController {
 	// 메서드 선언부에 BoardVO를 선언하고
 	// 리다이렉트시 글번호를 같이 넘기기 위해 
 	// RedirectAttributes를 선언합니다.
-	@PostMapping("/modify")
+	@PostMapping("/modifyrun")
 	public String modify(BoardVO board, RedirectAttributes rttr) {
 		service.modify(board);
 		// 수정된 글 번호 정보를 저장
@@ -96,7 +96,7 @@ public class BoardController {
 		return "redirect:/board/get?bno=" + board.getBno();		
 	}
 	
-	@GetMapping("/modify")
+	@PostMapping("/modify")
 	public String modify(Long bno, Model model) {
 		model.addAttribute("board", service.get(bno));
 		return "/board/modify";
