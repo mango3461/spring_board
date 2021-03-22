@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.ict.domain.BoardVO;
+import org.ict.domain.Criteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class BoardMapperTests {
 	// 수정내역은 BoardVO에 담아서 보내야 합니다.
 	// BoardVO를 생성해주시고 필요정보(bno, title, content)
 	// 를 세팅해서 수정구문을 실행해주세요.
-	@Test
+	//@Test
 	public void testUpdate() {
 		BoardVO board = new BoardVO();
 		
@@ -77,5 +78,15 @@ public class BoardMapperTests {
 		int count = 
 				boardMapper.update(board);
 		log.info("변경된 컬럼 수 : " + count);
+	}
+	//@Test
+	public void testListPage() {
+		Criteria cri = new Criteria();
+		cri.setPage(100);
+		cri.setNumber(10);
+		boardMapper.listPage(cri).forEach(board -> {
+			log.info(board);
+		});
+		
 	}
 }

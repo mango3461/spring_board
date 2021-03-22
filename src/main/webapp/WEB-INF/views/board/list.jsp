@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>list.jsp   </title>
 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
   </head>
 <body>
  <div class="container">
@@ -50,6 +50,33 @@
   <a href="http://localhost:8181/board/register" class="btn btn-primary right" 
   		style="float: right;" role="button">글쓰기</a>
   		
-</div>
+</div><!-- div container end -->
+<!-- 하단에 script태그를 이용해 ${bno}를 콘솔에 출력하는
+구문을 작성해 list페이지의 개발자 도구 console창에 출력해보세요. -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		// 삭제된 글 번호는 controller에서 넘어옵니다.
+		// ${bno}라는 명칭으로 넘어오므로 변수에 저장합니다.
+		// 문자열 형태로 받아오도록 처리
+		// 그렇지 않으면 콘솔창에서 받은 자료가 없을 때 에러가 남
+		
+		var bno = "${bno}";
+		console.log(bno);
+		
+		// alert()구문을 이용해 글을 삭제할때마다
+		// n번 글이 삭제되었습니다 라는 안내문구를 띄워주세요.
+		
+		// 조건문을 이용해 삭제일 때만 실행하도록 로직을 수정합니다.
+		
+		if(bno !== ''){
+			alert(bno + "번 글이 삭제되었습니다.");
+		}
+
+
+	})
+</script>
+
+
 </body>
 </html>

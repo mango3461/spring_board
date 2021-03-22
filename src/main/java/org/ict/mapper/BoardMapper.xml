@@ -48,4 +48,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			WHERE
 		bno = #{bno}
 	</update>
+	
+	<select id="listPage" resultType="org.ict.domain.BoardVO">
+	<!-- 아래 <![CDATA[ 는 닫는부분인]]> 사이의 모든문자를
+	쿼리문으로만 인식하고 태그요소로 인식하지 않게 함. -->
+	<![CDATA[
+		SELECT
+			bno, title, content, writer, regdate, updatedate
+		FROM
+			ictboard
+		WHERE bno > 0
+		ORDER BY bno DESC, regdate DESC
+		limit #{pageStart}, #{number}
+	]]>
+	</select>
 </mapper>

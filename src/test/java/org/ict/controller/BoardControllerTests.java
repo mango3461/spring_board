@@ -104,4 +104,14 @@ public class BoardControllerTests {
 					.param("bno", "3")
 				).andReturn().getModelAndView().getViewName();
 	}
+	//@Test
+	public void testListPage() throws Exception {
+		mockMvc.perform(
+			MockMvcRequestBuilders.get("/board/listPage"))
+				.andReturn()
+				.getModelAndView()
+				.getModelMap();
+				
+	}
+	
 }
