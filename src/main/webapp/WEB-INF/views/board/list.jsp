@@ -30,7 +30,7 @@
     <c:forEach items="${list }" var="list">
 	    <tr>
 		  <td>${list.bno}</td>
-		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}">${list.title}</a></td>
+		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}&page=${page }">${list.title}</a></td>
 		  <td>${list.writer}</td>
 		  <td>${list.regDate}</td>
 		  <td>${list.updateDate}</td>
@@ -39,13 +39,22 @@
 	</table>
 	<hr>
   <ul class="pagination justify-content-center">
-    <li class="page-item disabled"><a class="page-link" href="#">«</a></li>
-    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">4</a></li>
-    <li class="page-item"><a class="page-link" href="#">5</a></li>
-    <li class="page-item"><a class="page-link" href="#">»</a></li>
+  	<c:if test="${pageMaker.prev }">
+    	<li class="page-item">
+    		<a class="page-link" href="/board/list?page=${pageMaker.startPage -1 }">&laquo;</a>
+    	</li>
+    </c:if>
+    <c:forEach begin="${pageMaker.startPage }" 
+    			end="${pageMaker.endPage }"
+    			var="idx">
+    <li class="page-item
+    	<c:out value="${ pageMaker.cri.page == idx ? 'active' : ''}" />">
+    	<a class="page-link" href="http://localhost:8181/board/list?page=${idx }">${idx }</a></li>
+    </c:forEach>
+    <c:if test="${pageMaker.next && pageMaker.endPage > 0 }">  
+    	<li class="page-item">
+    		<a class="page-link" href="/board/list?page=${pageMaker.endPage +1 }">&raquo;</a></li>
+    </c:if>
   </ul>
   <a href="http://localhost:8181/board/register" class="btn btn-primary right" 
   		style="float: right;" role="button">글쓰기</a>

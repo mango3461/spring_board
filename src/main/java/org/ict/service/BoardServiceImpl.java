@@ -57,5 +57,8 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.listPage(cri);
 	}
 
-	
+	@Override
+	public int getCountPage(Criteria cri) {
+		return mapper.countPageNum(cri);
+	}
 }

@@ -43,4 +43,7 @@ public interface BoardMapper {
 	public int update(BoardVO board);
 	
 	public List<BoardVO> listPage(Criteria cri);
+	
+	// 전체 글 갯수를 로딩할 때마다 받아오기 위해 처리
+	public int countPageNum(Criteria cri);
 }

@@ -62,4 +62,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		limit #{pageStart}, #{number}
 	]]>
 	</select>
+	<select id="countPageNum" resultType="int">
+		<![CDATA[
+			SELECT COUNT(bno) FROM ictboard WHERE bno > 0
+		]]>
+	</select>
 </mapper>

@@ -11,6 +11,7 @@
 	<h1>${board.bno }번 글 내용</h1>
 	<form action="/board/modifyrun" method="post">
 		<input type="hidden" name="bno" value="${board.bno }">
+		<input type="hidden" name="page" value="${cri.page }">
 		글 제목<input type="text" name="title" class="form-control" value="${board.title }"><br>
 		글쓴이<input type="text" name="writer" class="form-control" readonly="readonly" value="${board.writer }"><br>
 		본문<br>
