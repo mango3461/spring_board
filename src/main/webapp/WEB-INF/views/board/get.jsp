@@ -13,6 +13,8 @@
 	<form method="post">
 		<input type="hidden" name="bno" value="${board.bno }">
 		<input type="hidden" name="page" value="${cri.page }">
+		<input type="hidden" name="searchType" value="${cri.searchType }">
+		<input type="hidden" name="keyword" value="${cri.keyword }">	
 		글 제목<input type="text" class="form-control" readonly="readonly" value="${board.title }"><br>
 		글쓴이<input type="text" class="form-control" readonly="readonly" value="${board.writer }"><br>
 		본문<br>
@@ -23,7 +25,8 @@
 		기본적으로는 input태그의 type=submit, reset 등을 쓰듯이 사용하면 됨
 		가변적으로 action(목표url)속성을 바꿔주기 위해서
 		data-oper 속성을 이용해 어떤버튼을 눌렀는지 함께 정보가 제공되도록 합니다. -->
-		<a href="http://localhost:8181/board/list?page=${cri.page }" class="btn btn-primary" role="button">목록</a>
+		<a href="http://localhost:8181/board/list?page=${cri.page}&searchType=${cri.searchType}&keyword=${cri.keyword}"
+			 class="btn btn-primary" role="button">목록</a>
 		<button type="submit" data-oper="modify" class="btn btn-warning">수정</button>
 		<button type="submit" data-oper="remove" class="btn btn-danger">삭제</button>
 		

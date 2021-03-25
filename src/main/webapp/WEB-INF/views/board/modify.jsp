@@ -12,6 +12,8 @@
 	<form action="/board/modifyrun" method="post">
 		<input type="hidden" name="bno" value="${board.bno }">
 		<input type="hidden" name="page" value="${cri.page }">
+		<input type="hidden" name="searchType" value="${cri.searchType }">
+		<input type="hidden" name="keyword" value="${cri.keyword }">	
 		글 제목<input type="text" name="title" class="form-control" value="${board.title }"><br>
 		글쓴이<input type="text" name="writer" class="form-control" readonly="readonly" value="${board.writer }"><br>
 		본문<br>

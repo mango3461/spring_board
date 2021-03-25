@@ -15,7 +15,50 @@
 <body>
  <div class="container">
  	<br>
- 	<h1 style="text-align: center;"> 게시판 </h1>
+ 	<div class="row">
+	<h1 style="text-align: center;"> 게시판 </h1>
+ 	</div>
+ 	<div class="row">
+ 		<div class="box-body">
+ 			<select name="searchType">
+ 				<option value="n"
+ 				<c:out value="${cri.searchType == null ? 'selected' : '' }" />>
+ 				-           
+ 				</option>
+ 				<option value="t"
+ 				<c:out value="${cri.searchType eq 't' ? 'selected' : '' }"/>>
+ 				제목
+ 				</option>
+ 				<option value="c"
+  				<c:out value="${cri.searchType eq 'c' ? 'selected' : '' }" />>	
+  				본문
+  				</option>
+  				<option value="w"
+  				<c:out value="${cri.searchType eq 'w' ? 'selected' : '' }" />>	
+  				글쓴이
+  				</option>
+  				<option value="tc"
+  				<c:out value="${cri.searchType eq 'tc' ? 'selected' : '' }" />>	
+  				제목+본문
+  				</option>
+  				<option value="cw"
+  				<c:out value="${cri.searchType eq 'cw' ? 'selected' : '' }" />>	
+  				본문+글쓴이
+  				</option>
+  				<option value="tcw"
+  				<c:out value="${cri.searchType eq 'tcw' ? 'selected' : '' }" />>	
+  				제목+본문+글쓴이
+  				</option>
+ 				
+ 			</select>
+ 			
+ 			<input type="text"
+ 				name="keyword"
+ 				id="keywordInput"
+ 				value="${cri.keyword }">
+ 			<button id="searchBtn">Search</button>
+ 		</div>
+ 	</div>
  	<br><br>
 	<table class="table table-hover">
 	<thead>
@@ -30,7 +73,7 @@
     <c:forEach items="${list }" var="list">
 	    <tr>
 		  <td>${list.bno}</td>
-		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}&page=${page }">${list.title}</a></td>
+		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}&page=${cri.page}&searchType=${cri.searchType}&keyword=${cri.keyword}">${list.title}</a></td>
 		  <td>${list.writer}</td>
 		  <td>${list.regDate}</td>
 		  <td>${list.updateDate}</td>
@@ -49,7 +92,8 @@
     			var="idx">
     <li class="page-item
     	<c:out value="${ pageMaker.cri.page == idx ? 'active' : ''}" />">
-    	<a class="page-link" href="http://localhost:8181/board/list?page=${idx }">${idx }</a></li>
+    	<a class="page-link" href="http://localhost:8181/board/list?page=${idx }
+    			&searchType=${cri.searchType}&keyword=${cri.keyword}">${idx }</a></li>
     </c:forEach>
     <c:if test="${pageMaker.next && pageMaker.endPage > 0 }">  
     	<li class="page-item">
@@ -83,6 +127,13 @@
 		}
 
 
+	})
+	$('#searchBtn').on("click", function(event) {
+		self.location = "list"
+			+ "?page=1"
+			+ "&searchType="
+			+ $("select option:selected").val()
+			+ "&keyword=" + $("#keywordInput").val();
 	})
 </script>
 

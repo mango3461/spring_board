@@ -2,7 +2,6 @@ package org.ict.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Select;
 import org.ict.domain.BoardVO;
 import org.ict.domain.Criteria;
 

@@ -49,6 +49,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		bno = #{bno}
 	</update>
 	
+		<sql id="search">
+		<!-- 동적쿼리 부분 -->	
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and (title like CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and (content like CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and (writer like CONCAT('%', #{keyword}, '%'))
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and (title like CONCAT('%', #{keyword}, '%')
+						OR
+					 content like CONCAT('%', #{keyword}, '%')
+					)
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and (content like CONCAT('%', #{keyword}, '%')
+						OR
+					 writer like CONCAT('%', #{keyword}, '%')
+					)
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				and (title like CONCAT('%', #{keyword}, '%')
+						OR
+					 content like CONCAT('%', #{keyword}, '%')
+					 	OR
+					 writer like CONCAT('%', #{keyword}, '%')
+					)
+			</if>
+		
+		</if>
+
+	</sql>
+	
+	
 	<select id="listPage" resultType="org.ict.domain.BoardVO">
 	<!-- 아래 <![CDATA[ 는 닫는부분인]]> 사이의 모든문자를
 	쿼리문으로만 인식하고 태그요소로 인식하지 않게 함. -->
@@ -58,6 +96,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM
 			ictboard
 		WHERE bno > 0
+	]]>
+		<!-- 동적쿼리 들어갑니다. -->
+		<include refid="search"></include>
+	<![CDATA[
 		ORDER BY bno DESC, regdate DESC
 		limit #{pageStart}, #{number}
 	]]>
@@ -66,5 +108,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<![CDATA[
 			SELECT COUNT(bno) FROM ictboard WHERE bno > 0
 		]]>
+		<include refid="search"></include>
 	</select>
 </mapper>
