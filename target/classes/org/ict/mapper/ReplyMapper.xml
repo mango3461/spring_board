@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getList" resultType="org.ict.domain.ReplyVO">
 		SELECT * FROM ictreply
 			WHERE bno = #{bno}
-			ORDER BY rno DESC
+<!-- 			ORDER BY rno DESC -->
 	</select>
 	
 	<insert id="create">

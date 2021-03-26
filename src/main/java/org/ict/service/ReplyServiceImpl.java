@@ -5,7 +5,9 @@ import java.util.List;
 import org.ict.domain.ReplyVO;
 import org.ict.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReplyServiceImpl implements ReplyService{
 	@Autowired
 	private ReplyMapper mapper;
