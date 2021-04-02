@@ -10,7 +10,7 @@
     <title>list.jsp   </title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
   </head>
 <body>
  <div class="container">
@@ -73,7 +73,9 @@
     <c:forEach items="${list }" var="list">
 	    <tr>
 		  <td>${list.bno}</td>
-		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}&page=${cri.page}&searchType=${cri.searchType}&keyword=${cri.keyword}">${list.title}</a></td>
+		  <td><a href="http://localhost:8181/board/get?bno=${list.bno}&page=${cri.page}&searchType=${cri.searchType}&keyword=${cri.keyword}">
+		  	${list.title}&#91;${list.replyCount}&#93;
+		  </a></td>
 		  <td>${list.writer}</td>
 		  <td>${list.regDate}</td>
 		  <td>${list.updateDate}</td>

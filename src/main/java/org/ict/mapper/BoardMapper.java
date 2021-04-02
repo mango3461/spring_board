@@ -2,6 +2,7 @@ package org.ict.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.ict.domain.BoardVO;
 import org.ict.domain.Criteria;
 
@@ -45,4 +46,7 @@ public interface BoardMapper {
 	
 	// 전체 글 갯수를 로딩할 때마다 받아오기 위해 처리
 	public int countPageNum(Criteria cri);
+	
+	public void updateReplyCount(@Param("bno") Long bno,
+								@Param("amount") int amount);
 }

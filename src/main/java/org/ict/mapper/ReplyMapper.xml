@@ -25,8 +25,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<delete id="delete">
+		
 		DELETE FROM ictreply
 		WHERE rno = #{rno}
+	</delete>
+	
+	<select id="getBno" resultType="long">
+		SELECT bno FROM ictreply
+			WHERE rno = #{rno}
+	</select>
+	
+	<delete id="deleteAll">
+		DELETE FROM ictreply
+			WHERE bno = #{bno}
 	</delete>
 
 </mapper>

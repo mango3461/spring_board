@@ -23,6 +23,23 @@
 	
 	<context:component-scan base-package="org.ict.controller" />
 	
+	<beans:bean id="loginInterceptor" class="org.ict.interceptor.LoginInterceptor"></beans:bean>
 	
+	<beans:bean id="authInterceptor" class="org.ict.interceptor.AuthInterceptor"></beans:bean>
+
+	<interceptors>
+		<interceptor>
+			<mapping path="/user/loginPost" />
+			<beans:ref bean="loginInterceptor" />
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/board/register"/>
+			<mapping path="/board/modify"/>
+			<mapping path="/board/remove"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+	</interceptors>
+
 	
 </beans:beans>

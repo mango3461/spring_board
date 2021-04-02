@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
 <title>register.jsp</title>
 </head>
 <body>
@@ -18,7 +18,8 @@
 	<form action="/board/register" method="post">
 		제목 : <input type="text" class="form-control" name="title" /> <br>
 		본문 : <br><textarea class="form-control" name="content"></textarea> <br>
-		글쓴이 : <input class="form-control" type="text" name="writer" /> <br>
+		글쓴이 : <input class="form-control" type="text" name="writer" readonly 
+						value="${login.uname }" /> <br>
 		<input type="submit" class="btn btn-primary" value="제출">
 	</form>
 
