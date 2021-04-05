@@ -1,8 +1,5 @@
 package org.ict.controller;
 
-import java.util.List;
-
-import org.ict.domain.LoginDTO;
 import org.ict.domain.UserVO;
 import org.ict.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +18,7 @@ public class CheckController {
 	@Autowired
 	private UserService service;
 	
-	@PostMapping(value="/check/{uid}", 
+	@PostMapping(value="/check/{uid}", consumes="application/json",
 			// XML, JSON을 모두 처리하려면 아래와 같이
 			// produces에 MediaType을 두개 이상 넣습니다.
 				produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -29,7 +26,8 @@ public class CheckController {
 		ResponseEntity<UserVO> entity = null;
 		
 		try {
-			entity = new ResponseEntity<>(, HttpStatus.OK);
+			UserVO vo = service.getUserInfo(uid);
+			entity = new ResponseEntity<>(vo, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);

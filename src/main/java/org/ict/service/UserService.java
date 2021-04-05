@@ -1,5 +1,7 @@
 package org.ict.service;
 
+import java.sql.Date;
+
 import org.ict.domain.LoginDTO;
 import org.ict.domain.UserVO;
 
@@ -7,8 +9,11 @@ public interface UserService {
 	
 	public UserVO login(LoginDTO dto) throws Exception;
 
-	void joinMem(UserVO vo);
+	public void joinMem(UserVO vo);
 	
+	public UserVO getUserInfo(String uid);
 
-	UserVO getUserInfo(UserVO vo);
+	public void keepLogin(String uid, String sessionId, Date next) throws Exception;
+	
+	public UserVO checkLoginBefore(String value);
 }

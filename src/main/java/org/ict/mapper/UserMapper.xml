@@ -20,4 +20,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getUserInfo">
 		SELECT * FROM ictuser WHERE uid = #{uid}
 	</select>
+	
+	<update id="keepLogin">
+		UPDATE ictuser
+			SET sessionKey = #{sessionId},
+				sessionLimit = #{next}
+			WHERE uid = #{uid}
+	</update>
+	
+	<select id="checkUserWithSessionKey" resultType="org.ict.domain.UserVO">
+		SELECT * FROM ictuser
+			WHERE sessionKey = #{value}
+			AND sessionLimit > now()
+	</select>
+	
 </mapper>

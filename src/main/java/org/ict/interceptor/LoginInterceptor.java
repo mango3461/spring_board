@@ -1,5 +1,6 @@
 package org.ict.interceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		if(userVO != null) {
 			log.info("new login success");
 			session.setAttribute(LOGIN, userVO);
+			
+			if(request.getParameter("useCookie") != null) {
+				log.info("remember me!");
+				Cookie loginCookie = new Cookie("loginCookie", session.getId());
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(60 * 60 * 24 * 7);
+				response.addCookie(loginCookie);
+			}
+			
 			// saveDest() 로 인해 세션에 저장된 이전 페이지 정보 가져오기
 			Object dest = session.getAttribute("dest");
 			
