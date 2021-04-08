@@ -2,6 +2,7 @@ package org.ict.service;
 
 import java.util.List;
 
+import org.ict.domain.Criteria;
 import org.ict.domain.ReplyVO;
 
 public interface ReplyService {
@@ -12,5 +13,9 @@ public interface ReplyService {
 	public void modifyReply(ReplyVO vo);
 	
 	public void removeReply(int rno);
+	
+	public List<ReplyVO> getListPage(int bno, Criteria cri);
+	
+	public int count(int bno);
 
 }

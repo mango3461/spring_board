@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.ict.domain.BoardVO;
-import org.ict.domain.Criteria;
 import org.ict.domain.PageMaker;
 import org.ict.domain.SearchCriteria;
 import org.ict.service.BoardService;

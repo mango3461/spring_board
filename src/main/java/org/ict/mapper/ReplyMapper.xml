@@ -9,9 +9,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getList" resultType="org.ict.domain.ReplyVO">
 		SELECT * FROM ictreply
 			WHERE bno = #{bno}
-<!-- 			ORDER BY rno DESC -->
+			ORDER BY rno DESC
 	</select>
-	
+		
 	<insert id="create">
 		INSERT INTO ictreply (bno, replytext, replyer)
 			VALUES (#{bno}, #{replytext}, #{replyer})
@@ -24,8 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE rno = #{rno}
 	</update>
 	
-	<delete id="delete">
-		
+	<delete id="delete">		
 		DELETE FROM ictreply
 		WHERE rno = #{rno}
 	</delete>
@@ -40,4 +39,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			WHERE bno = #{bno}
 	</delete>
 
+	<select id="getListPage" resultType="org.ict.domain.ReplyVO">
+		SELECT * FROM ictreply
+			WHERE bno = #{bno}
+			ORDER BY rno DESC
+			limit #{cri.pageStart}, #{cri.number}
+	</select>
+	
+	<select id="count" resultType="int">
+		SELECT count(bno) from ictreply
+			WHERE bno = #{bno}	
+	</select>
+	
+	
+	
 </mapper>

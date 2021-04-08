@@ -25,10 +25,6 @@
 	<h2>Ajax 테스트</h2>
 	
 	
-	<ul id="replies">
-	</ul>
-	<button id="replyListBtn">댓글
-	</button>
 	
 	<div>
 		<div>
@@ -39,6 +35,12 @@
 		</div>
 		<button id="replyAddBtn">ADD REPLY</button>
 	</div>
+	<ul id="replies">
+	</ul>
+	<ul class="pagination">
+	</ul>
+	<button id="replyListBtn">댓글
+	</button>
 	
 	<!-- 모달 창 위치 -->
 	<div id="modDiv" style="display:none;">
@@ -63,7 +65,7 @@
 			// rest 주소에 데이터를 요청하고 받아온 데이터를 data변수에 담아준다.
 			$.getJSON("/replies/all/" + bno, function(data){
 				
-				console.log(data.length);
+// 				console.log(data.length);
 	// 			console.log("---------------");
 	// 			console.log(data);
 	
@@ -90,6 +92,49 @@
 				$("#replies").html(str);
 			});
 		}
+		
+		function getPageList(page){
+			$.getJSON("/replies/" + bno + "/" + page, function(data){
+// 				console.log(data.list.length);
+				var str = "";
+				
+				$(data.list).each(function(){
+					str += "<li data-rno='" + this.rno + "' class='replyLi'>"
+						+ this.rno + ":" + this.replytext
+						+ "<button>MOD</button></li>";
+				});
+				$("#replies").html(str);
+				
+				printPaging(data.pageMaker);
+			}); 
+		}//getPageList
+		getPageList(1);
+		
+		function printPaging(pageMaker) {
+			var str = "";
+			console.log(pageMaker);
+			if(pageMaker.prev){
+				str += "<li><a href='" + (pageMaker.startPage - 1) + "'> << </a></li>";
+			}
+			
+			for(var i = pageMaker.startPage, len=pageMaker.endPage; i<=len; i++) {
+				var strClass = pageMaker.cri.page == i ? 'class=active':'';
+				str += "<li " + strClass + "><a href='" + i + "'>" + i + "</a></li>";
+			}
+			
+			if(pageMaker.next) {
+				str += "<li><a href='" + (pageMaker.endPage + 1) + "'> >> </a></li>";
+			}
+			$(".pagination").html(str);
+		}//printPaging
+		
+		$(".pagination").on("click", "li a", function(e){
+			e.preventDefault();
+			console.log(this);
+			replyPage = $(this).attr("href");
+			console.log(replyPage);
+			getPageList(replyPage);
+		})
 		
 		$("#replyAddBtn").on("click", function(){
 			var replyer = $("#newReplyWriter").val();

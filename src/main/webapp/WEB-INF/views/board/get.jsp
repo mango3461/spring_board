@@ -56,6 +56,9 @@
 				<div id="replies">
 					<!-- 댓글이 들어갈 위치 -->
 				</div>
+				<ul class="pagination">
+					<!-- 댓글 페이지네이션 -->
+				</ul>
 		</div><!-- row -->
 		<c:if test="${not empty login }">
 			<div class="row box-box-success">
@@ -194,7 +197,50 @@
 					$("#replies").html(str);
 				});
 			}// getAllList
-			getAllList();
+// 			getAllList();
+			
+			function getPageList(page){
+				$.getJSON("/replies/" + bno + "/" + page, function(data){
+//	 				console.log(data.list.length);
+					var str = "";
+					
+					$(data.list).each(function(){
+						str += "<li data-rno='" + this.rno + "' class='replyLi'>"
+							+ this.rno + ":" + this.replytext
+							+ "<button class='btn btn-info'>MOD</button></li>";
+					});
+					$("#replies").html(str);
+					
+					printPaging(data.pageMaker);
+				}); 
+			}//getPageList
+ 			getPageList(${cri.page});
+			
+			function printPaging(pageMaker) {
+				var str = "";
+				
+				if(pageMaker.prev){
+					str += "<li class='page-item'><a class='page-link' href='" + (pageMaker.startPage - 1) + "'> << </a></li>";
+				}
+				
+				for(var i = pageMaker.startPage, len=pageMaker.endPage; i<=len; i++) {
+					var strClass = pageMaker.cri.page == i ? 'class=active':'';
+					str += "<li class='page-item' " + strClass + "><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+				}
+				
+				if(pageMaker.next) {
+					str += "<li class='page-item'><a class='page-link' href='" + (pageMaker.endPage + 1) + "'> >> </a></li>";
+				}
+				$(".pagination").html(str);
+			}//printPaging
+			
+			$(".pagination").on("click", "li a", function(e){
+				e.preventDefault();
+				console.log(this);
+				replyPage = $(this).attr("href");
+				console.log(replyPage);
+				getPageList(replyPage);
+			})
 			
 			$("#replyAddBtn").on("click", function(){
 				var replyer = $("#newReplyer").val();

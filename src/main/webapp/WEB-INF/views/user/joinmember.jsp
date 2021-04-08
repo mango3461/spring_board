@@ -24,6 +24,7 @@
 			<input type="text" name="uname" class="form-control" placeholder="NAME" />
 			<span class="glyphicon glyphicon-lock form-control-feedback"></span>
 		</div>
+		
 		<div>
 			<button type="submit" class="btn btn-primary btn-block btn-flat">가입하기</button>
 		</div>
