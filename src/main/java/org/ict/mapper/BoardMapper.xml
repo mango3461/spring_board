@@ -116,4 +116,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			set
 		replycount = replycount + #{amount} where bno = #{bno}
 	</update>
+	
+	<select id="getMaxBno" resultType="long">
+		SELECT MAX(bno) FROM ictboard
+	</select>
 </mapper>

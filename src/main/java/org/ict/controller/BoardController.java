@@ -2,21 +2,35 @@ package org.ict.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
+import org.ict.domain.BoardAttachVO;
 import org.ict.domain.BoardVO;
 import org.ict.domain.PageMaker;
 import org.ict.domain.SearchCriteria;
 import org.ict.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -66,7 +80,7 @@ public class BoardController {
 	// Post방식을 적용합니다.
 	// 따라서 PostMapping 어노테이션을 써야합니다.
 	@PostMapping("/register")
-	public String register(BoardVO board,
+	public String register(BoardVO board, SearchCriteria cri,
 							RedirectAttributes rttr) {
 		// 게시물 등록 후 리스트 창으로 이동하기 위해
 		// 리다이렉트 방식을 활용합니다.
@@ -79,6 +93,14 @@ public class BoardController {
 		service.register(board);
 		
 		rttr.addFlashAttribute("result", board.getBno());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		rttr.addAttribute("keyword", cri.getKeyword());
+		
+		log.info("=================");
+		log.info("register: " + board);
+		if(board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> log.info(attach));
+		}
 				
 		return "redirect:/board/list";
 	}
@@ -174,13 +196,17 @@ public class BoardController {
 	}
 	
 	@PostMapping("/uploadAjaxAction")
-	public void uploadAjaxPost(MultipartFile[] uploadFile) {
+	public ResponseEntity<List<BoardAttachVO>> uploadAjaxPost(MultipartFile[] uploadFile) {
 		log.info("ajax post update!");
 		
+		
+		List<BoardAttachVO> list = new ArrayList<>();
 		String uploadFolder = "C:\\upload_data\\temp";
 		
+		String uploadFolderPath = getFolder();
+		
 		//폴더 생성
-		File uploadPath = new File(uploadFolder, getFolder());
+		File uploadPath = new File(uploadFolder, uploadFolderPath);
 		log.info("upload path: " + uploadPath);
 		
 		if(uploadPath.exists() == false) {
@@ -192,11 +218,15 @@ public class BoardController {
 			log.info("Upload file name: " + multipartFile.getOriginalFilename());
 			log.info("upload file size: " + multipartFile.getSize()); 
 			
+			BoardAttachVO attVO = new BoardAttachVO();
+			
 			String uploadFileName = multipartFile.getOriginalFilename();
 			
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			
 			log.info("last file name: " + uploadFileName);
+			
+			attVO.setFileName(uploadFileName);
 			
 			UUID uuid = UUID.randomUUID();
 			
@@ -205,8 +235,15 @@ public class BoardController {
 			try {
 				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
+				
+				// 전달할 이미지 정보에 uuid, uploadPath 추가하기
+				attVO.setUuid(uuid.toString());
+				attVO.setUploadPath(uploadFolderPath);
+				
 				//이 아래부터 썸네일 생성로직
 				if(checkImageType(saveFile)) {
+					attVO.setFileType(true);
+					
 					FileOutputStream thumbnail =
 							new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
 					
@@ -215,11 +252,95 @@ public class BoardController {
 					thumbnail.close();
 					
 				}
-
+				list.add(attVO);
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}
 		}//end for
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@GetMapping("/display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		
+		log.info("fileName: " + fileName);
+		File file = new File("c:\\upload_data\\temp\\" + fileName);
+		log.info("file: " + file);
+		
+		ResponseEntity<byte[]> result = null;		
+		
+		
+		try {
+			HttpHeaders header = new HttpHeaders();
+			
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),
+											header,
+											HttpStatus.OK);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName) {
+		
+		log.info("download file: " + fileName);
+		
+		Resource resource = new FileSystemResource("C:\\upload_data\\temp\\" + fileName);
+		
+		log.info("resource: " + resource);
+		
+		String resourceName = resource.getFilename();
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		try {
+			headers.add("Content-Disposition", "attachment; filename=" +
+						new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+	
+	@PostMapping("/deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		log.info("deleteFile: " + fileName);
+		
+		File file = null;
+		
+		try {
+			file = new File("c:\\upload_data\\temp\\" + URLDecoder.decode(fileName, "UTF-8"));
+			
+			file.delete();
+			
+			if(type.equals("image")) {
+				String largeFileName = file.getAbsolutePath().replace("s_", "");
+				
+				log.info("largeFileName: " + largeFileName);
+				
+				file = new File(largeFileName);
+				
+				file.delete();
+			}
+		} catch (UnsupportedEncodingException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<BoardAttachVO>> getAttachList(Long bno){
+		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
 	}
 	
 }

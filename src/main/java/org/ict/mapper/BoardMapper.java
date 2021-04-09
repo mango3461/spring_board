@@ -49,4 +49,6 @@ public interface BoardMapper {
 	
 	public void updateReplyCount(@Param("bno") Long bno,
 								@Param("amount") int amount);
+
+	public Long getMaxBno();
 }

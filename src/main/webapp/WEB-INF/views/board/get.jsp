@@ -144,6 +144,11 @@
 					formObj.attr("action", "http://localhost:8181/board/modify?bno=${board.bno}")
 				} else if(operation === "remove") {
 					formObj.attr("action", "http://localhost:8181/board/remove?bno=${board.bno}")
+				} else {
+					$(".uploadResult ul li").each(function(i, obj) {
+						var jobj = $(obj);
+					
+					})					
 				}
 				
 				// 조건문이 다 돌면 제출되도록 처리하는 코드

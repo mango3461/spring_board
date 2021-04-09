@@ -2,9 +2,11 @@ package org.ict.service;
 
 import java.util.List;
 
+import org.ict.domain.BoardAttachVO;
 import org.ict.domain.BoardVO;
 import org.ict.domain.Criteria;
 import org.ict.domain.SearchCriteria;
+import org.ict.mapper.BoardAttachMapper;
 import org.ict.mapper.BoardMapper;
 import org.ict.mapper.ReplyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class BoardServiceImpl implements BoardService{
 	private BoardMapper mapper;
 	@Autowired
 	private ReplyMapper replyMapper;
+	@Autowired
+	private BoardAttachMapper attachMapper;
 	
 	// 메서드 실행용 테스트코드를 만들어주세요.
 	// src/test/java 하위에 org.ict.service 패키지를 만들고
@@ -32,6 +36,15 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void register(BoardVO board) {
 		mapper.insert(board);
+		Long bno = mapper.getMaxBno();
+		if(board.getAttachList() == null || board.getAttachList().size()<=0) {
+			return;
+		}
+		
+		board.getAttachList().forEach(attach -> {
+			attach.setBno(bno);
+			attachMapper.insert(attach);
+		});
 	}
 
 	@Override
@@ -71,5 +84,9 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.countPageNum(cri);
 	}
 
+	@Override
+	public List<BoardAttachVO> getAttachList(Long bno) {
+		return attachMapper.findByBno(bno);
+	}
 
 }
